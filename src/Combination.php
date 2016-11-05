@@ -106,7 +106,7 @@ class Combination
      */
     public function get()
     {
-        $this->setCharactersSplitted(preg_split('//u', $this->getCharacters(), -1, PREG_SPLIT_NO_EMPTY));
+        $this->initialize();
 
         $combinations = [];
         while (( $combination = $this->combinate($currentCombination) ) !== false) {
@@ -114,6 +114,30 @@ class Combination
         }
 
         return $combinations;
+    }
+
+    /**
+     * @param string $file
+     * @param string $delimiter
+     */
+    public function write($file, $delimiter)
+    {
+        $this->initialize();
+
+        $firstLineWritten = false;
+        while (( $combination = $this->combinate($currentCombination) ) !== false) {
+            if ($firstLineWritten) {
+                file_put_contents($file, $delimiter, FILE_APPEND);
+            }
+            file_put_contents($file, $combination, FILE_APPEND);
+
+            $firstLineWritten = true;
+        }
+    }
+
+    private function initialize()
+    {
+        $this->setCharactersSplitted(preg_split('//u', $this->getCharacters(), -1, PREG_SPLIT_NO_EMPTY));
     }
 
     private function combinate(&$currentCombination = [])
@@ -144,7 +168,7 @@ class Combination
 
         $positionToIncrease = 0;
         while ($count >= 0) {
-            if ($combinationArray[$count] < count($this->getCharactersSplitted())-1) {
+            if ($combinationArray[$count] < count($this->getCharactersSplitted()) - 1) {
                 $positionToIncrease = $count;
 
                 break;
