@@ -79,7 +79,7 @@ class CombinationTest extends PHPUnit_Framework_TestCase
     }
 
     /** @test */
-    public function combination_of_36_characters_with_size_3_returns_array_with_60466176_entries()
+    public function combination_of_36_characters_with_size_3_returns_array_with_46656_entries()
     {
         $this->combination->setCharacters('abcdefghijklmnopqrstuvwxyz0123456789');
         $this->combination->setSize(3);
@@ -88,5 +88,20 @@ class CombinationTest extends PHPUnit_Framework_TestCase
         $result = array_filter($result);
         $this->assertEquals(46656, count($result));
         $this->assertTrue(in_array('2mi', $result));
+    }
+
+    /** @test */
+    public function combination_fetch_of_2_characters_with_size_2_fetch_4_entries()
+    {
+        $this->combination->setCharacters('th');
+        $this->combination->setSize(2);
+
+        $combinations = [];
+        while (( $combination = $this->combination->next() ) !== false) {
+            $combinations[] = $combination;
+        }
+
+        $this->assertEquals(4, count($combinations));
+        $this->assertEquals([ 'tt', 'th', 'ht', 'hh' ], $combinations);
     }
 }

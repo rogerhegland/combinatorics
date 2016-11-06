@@ -12,6 +12,10 @@ class Combination
 
     private $charactersSplitted = [];
 
+    private $initialized = false;
+
+    private $currentCombination = [];
+
     /**
      * Combination constructor.
      *
@@ -102,14 +106,31 @@ class Combination
     }
 
     /**
+     * @return boolean
+     */
+    private function isInitialized(): bool
+    {
+        return $this->initialized;
+    }
+
+    /**
+     * @param boolean $initialized
+     * @return Combination
+     */
+    private function setInitialized(bool $initialized): Combination
+    {
+        $this->initialized = $initialized;
+
+        return $this;
+    }
+
+    /**
      * @return array
      */
     public function get()
     {
-        $this->initialize();
-
         $combinations = [];
-        while (( $combination = $this->combinate($currentCombination) ) !== false) {
+        while (( $combination = $this->next() ) !== false) {
             $combinations[] = $combination;
         }
 
@@ -122,10 +143,8 @@ class Combination
      */
     public function write($file, $delimiter)
     {
-        $this->initialize();
-
         $firstLineWritten = false;
-        while (( $combination = $this->combinate($currentCombination) ) !== false) {
+        while (( $combination = $this->next() ) !== false) {
             if ($firstLineWritten) {
                 file_put_contents($file, $delimiter, FILE_APPEND);
             }
@@ -135,9 +154,21 @@ class Combination
         }
     }
 
+    public function next()
+    {
+        $this->initialize();
+
+        $combination = $this->combinate($this->currentCombination);
+
+        return $combination;
+    }
+
     private function initialize()
     {
-        $this->setCharactersSplitted(preg_split('//u', $this->getCharacters(), -1, PREG_SPLIT_NO_EMPTY));
+        if ( ! $this->isInitialized()) {
+            $this->setCharactersSplitted(preg_split('//u', $this->getCharacters(), -1, PREG_SPLIT_NO_EMPTY));
+            $this->setInitialized(true);
+        }
     }
 
     private function combinate(&$currentCombination = [])
