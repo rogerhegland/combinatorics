@@ -1,4 +1,4 @@
-Deliver zip for cantons, regions and districts
+Get array / write file / iterate through all combinations of passed characters with defined length.
 
 # Permutation
 
