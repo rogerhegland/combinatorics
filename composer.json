@@ -2,8 +2,9 @@
   "name": "hegland/combinatorics",
   "type": "library",
   "version": "0.1.0",
-  "description": "Deliver zip for cantons, regions and districts",
+  "description": "Get array / write file / iterate through all combinations of passed characters with defined length.",
   "keywords": [
+    "Combinatorics",
     "Permutation",
     "Variation",
     "Combination"
